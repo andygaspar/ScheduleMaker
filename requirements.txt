@@ -1,3 +1,4 @@
+git+https://${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}@github.com/andygaspar/ScheduleMaker.git
 contourpy==1.0.7
 CostModels @ git+https://github.com/andygaspar/CostModels.git@4ad132669d8b8c1cf124b3ae879951d022ef88de
 cycler==0.11.0
