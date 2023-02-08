@@ -22,6 +22,9 @@ class RealisticSchedule:
     def __init__(self):
         self.df_airline = pd.read_csv(os.path.join(os.path.dirname(__file__),
                                                    "../SchedulesData/airport_airline_frequency.csv"))
+
+        self.low_costs = self.df_airline[self.df_airline.low_cost == True].airline.unique().tolist()
+
         self.df_aircraft_high = pd.read_csv(os.path.join(os.path.dirname(__file__),
                                                          "../SchedulesData/aircraft_high.csv"))
         self.df_aircraft_low = pd.read_csv(os.path.join(os.path.dirname(__file__),
@@ -65,6 +68,7 @@ class RealisticSchedule:
 
         for i in range(n_flights):
             airline = df_airline.airline.sample(weights=df_airline.frequency).iloc[0]
+            is_low_cost = airline in self.low_costs
             df_airport_airline = df_airport[df_airport.airline == airline]
             fl_type = df_airport_airline.air_cluster.sample(weights=df_airport_airline.frequency).iloc[0]
 
@@ -80,7 +84,7 @@ class RealisticSchedule:
             curfew = (curfew_th, self.get_passengers(rotation_destination, airline, fl_type, load_factor)) \
                 if curfew_th is not None else None
 
-            cost_fun = get_cost_model(aircraft_type=fl_type, airline=airline, destination=airport,
+            cost_fun = get_cost_model(aircraft_type=fl_type, is_low_cost=is_low_cost, destination=airport,
                                       length=length, n_passengers=passengers, missed_connected=missed_connected,
                                       curfew=curfew)
 
