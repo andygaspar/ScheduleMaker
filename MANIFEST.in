@@ -1,1 +1,1 @@
-include SchedulePackage/ScheduleData/*.csv
+include SchedulePackage/SchedulesData/*.csv
