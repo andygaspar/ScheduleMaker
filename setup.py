@@ -13,7 +13,7 @@ LONG_DESCRIPTION = ''
 
 # Setting up
 setup(
-    name="CostModels",
+    name="ScheduleMaker",
     version=VERSION,
     author="Andrea Gasparin, Fulvio Vascotto",
     author_email="<andrea.gasparin@phd.units.it>",
