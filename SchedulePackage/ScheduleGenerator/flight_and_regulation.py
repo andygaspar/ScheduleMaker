@@ -1,6 +1,6 @@
 import numpy as np
 
-class Flight:
+class ScheduleFlight:
 
     def __init__(self, idx, fl_time, new_time, airline, is_low_cost, fl_type, passengers, missed_connected, curfew, length,
                  cost_fun, delay_cost_vect):
@@ -17,6 +17,12 @@ class Flight:
         self.length = length
         self.cost_fun = cost_fun
         self.delay_cost_vect = delay_cost_vect
+
+class ScheduleSlot:
+    def __init__(self, index, original_time, new_time):
+        self.index = index
+        self.original_time = original_time
+        self.new_time = new_time
 
 
 class Regulation:

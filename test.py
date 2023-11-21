@@ -20,7 +20,7 @@ print(time.time() - t)
 for f in fl_list[:20]:
     plt.plot(f.delay_cost_vect)
     print(f.missed_connected)
-    plt.show()
+plt.show()
 
 
 # t = time.time()

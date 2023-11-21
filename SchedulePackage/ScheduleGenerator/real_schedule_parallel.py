@@ -8,7 +8,7 @@ import multiprocessing as mp
 
 df_curfew = pd.read_csv(os.path.join(os.path.dirname(__file__), "../SchedulesData/curfew.csv"))
 
-from SchedulePackage.ScheduleGenerator.flight_and_regulation import Flight, Regulation
+from SchedulePackage.ScheduleGenerator.flight_and_regulation import ScheduleFlight, Regulation, ScheduleSlot
 
 flights = pd.read_csv(os.path.join(os.path.dirname(__file__), "../SchedulesData/flights_complete.csv"))
 
@@ -108,7 +108,9 @@ def make_flight(airport, airline, fl_type, eta, min_turnaround, load_factor, is_
         if curfew_th is not None else None
 
     curfew = curfew[0] if curfew is not None else curfew
-    flight = Flight(idx, fl_time, new_times[idx], airline, is_low_cost, fl_type, passengers, missed_connected, curfew, length, None, None)
+    flight = ScheduleFlight(
+        idx, fl_time, new_times[idx], airline, is_low_cost, fl_type, passengers, missed_connected, curfew, length,
+        None, None)
 
     return flight
 
@@ -155,7 +157,7 @@ class RealisticScheduleParallel:
 
         df_airport = self.df_airport_airline_aircraft[self.df_airport_airline_aircraft.airport == airport]
 
-        slot_list = [{'index': i, 'initial_time': times[i], 'new_time': new_times[i]} for i in range(times.shape[0])]
+        slot_list = [ScheduleSlot(index=i, original_time=times[i], new_time=new_times[i]) for i in range(times.shape[0])]
 
         args = []
         for idx in range(n_flights):
@@ -172,7 +174,7 @@ class RealisticScheduleParallel:
         with mp.Pool(mp.cpu_count()) as pool:
             flight_list = pool.starmap(make_flight, args)
 
-        flight_list: List[Flight]
+        flight_list: List[ScheduleFlight]
         for fl in flight_list:
             cost_fun = get_cost_model(aircraft_type=fl.fl_type, is_low_cost=fl.is_low_cost, destination=airport,
                                       length=fl.length, n_passengers=fl.passengers, missed_connected=fl.missed_connected,
